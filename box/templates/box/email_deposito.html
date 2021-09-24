@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<title>Email-Odonto</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+
+  <div  style=" font-family:Arial, Helvetica, sans-serif; font-size:18px; color:#000000;  ">
+  <div  style="width:50%;">
+  
+    <header class="w3-container" style="background-color:#8D2FFA;  border-radius: 20px; margin: 10px 0;text-align: center;">
+      <h1 >Clínica Odontológica</h1>
+    </header>
+
+    <div style="padding:30px !important; background-color:#BE70FA; border-radius: 20px; margin: 10px 0;">
+      <p>Olá, caro(a) <b> <!--{{nomeDestinatario}}-->Aluno(a)! <br></b> seu depósito foi recebido para esterilização. 
+        Fique no aguardo, assim que finalizado estaremos notificando por e-mail. Você também pode acessar a plataforma para acompanhamento.</p>
+        <p>Seu número de depósito: 
+          <b>{{objeto.id_padrao}} </b>
+        </p> 
+        <p>Os itens recebidos foram: <br></p>
+        <ul>
+          
+          {% for item in objeto.itens.all  %} 
+            <li>
+              <b> {{item.id_padrao}} - {{item.tipo_box.nome_volume}}:</b> 
+              Qtde: {{item.quantidade}} <b>Situação: {{item.situacao}} </b>
+            </li>
+          {% endfor %} 
+
+        </ul>
+    </div>
+
+    <footer class="w3-container " style="background-color:#8D2FFA;  border-radius: 10px; margin: 10px 0;text-align: center;">
+      <h6>&reg; UNDB, Clínica Odontológica.<br/>
+       Acompanhe sempre seus status pela plataforma e mail.</h6>
+    </footer>
+  </div>
+</div>
+ 
+</body>
+</html>

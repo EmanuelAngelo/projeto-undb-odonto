@@ -1,0 +1,185 @@
+{% load static %}
+{% load basetags %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>{% block title %}{{app_name}}{% endblock %}</title>
+    <link rel="icon" href="https://www.undb.edu.br/hubfs/avatar_site.png" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <style>
+        .image-bg{
+            background-color: #3d7897;
+            background-size: cover;
+        }
+        .custom-background{
+            background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCPoI32DR8hfuCZ5jw8lEmZWTUPVInMuWpWw&usqp=CAU); 
+            background-size: cover;
+        }
+    </style>
+
+
+    {% block custom_css %}{% endblock %}
+</head>
+<body class="{% block body_image %}image-bg{% endblock %}">
+
+    <!-- PRE-LOADER -->
+    <div class="cssload-box-loading fade-out" style="z-index:99999" id="preloader"></div>
+
+    <div class="fade-in fade-out" id="main-app" style="display:none;width: 100%">
+        
+        <div id="app_template">
+            <v-app id="inspire">
+                {% block sidebar %}
+                {% if request.user.is_authenticated %}
+                <v-navigation-drawer v-model="drawer" app  dark class="pt-2 custom-background">
+                    <v-list>
+                        {% include 'includes/sidebar_menu.html' %}
+                    </v-list>
+                </v-navigation-drawer>
+                {% endif %}
+                {% endblock sidebar %}
+
+                {% block navbar %}
+                <v-app-bar app dark class="custom-background">
+                    {% if request.user.is_authenticated %}
+                    <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+                    {% endif %}
+
+                    <v-toolbar-title></v-toolbar-title>
+                </v-app-bar>
+                {% endblock navbar %}
+
+                <v-main class="{% block main_class %}image-bg{% endblock %}">
+                    <v-container class="mb-10">
+                      {% if messages %}
+                      {% for message in messages %}
+                        <v-alert dense type="{{message.tags}}" dismissible>{{message}}</v-alert>
+                      {% endfor %}
+                      {% endif %}
+                      
+                      {% block content_card %}
+                      <v-card class="main-card">
+                            {% block content %}
+                            <router-view></router-view>
+                            {% endblock content %}
+                    </v-card>
+                    {% endblock content_card %}
+                </v-container>
+            </v-main>
+            <v-footer padless dark class="custom-background" absolute>
+                <v-col dense class="text-right" cols="12">
+                  <small>Grupo Dom Bosco - [[ new Date().getFullYear() ]] </small>
+              </v-col>
+          </v-footer>
+      </v-app>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
+<script src="{% static 'vue-resource.js' %}"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+{% block componentes %}
+
+{% endblock %}
+
+{% include 'vue/componentes/inicio.vue' %} 
+{% include 'vue/componentes/status.vue' %} 
+{% include 'vue/componentes/formsgoogle.vue' %}
+{% include 'vue/componentes/resetaluno.vue' %}
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		  //document.getElementById('body').style.display = 'block';
+		  document.getElementById('preloader').style.display = 'none';
+      document.getElementById('main-app').style.display = 'block';
+  });
+</script>
+
+<script>
+    
+    const ComponenteInicio = { template: "<inicio></inicio>"  }
+    const ComponenteStatus = { template: "<status></status>"  }
+    const ComponenteFormsG = { template: "<formsgoogle></formsgoogle>"  }
+    
+    const routes = [
+       
+        { name:'inicio', component: ComponenteInicio, path: '/inicio',}, 
+        { name:'status', component: ComponenteStatus, path: '/',}, 
+        { name:'formsgoogle', component: ComponenteFormsG, path: '/formsgoogle',},
+        { path: '*', redirect: '/'         },
+    ]
+
+    const router = new VueRouter({
+      routes
+    })
+
+    var app_template = new Vue({
+        router,
+        el: '#app_template',
+        delimiters: ['[[',']]'],
+        vuetify: new Vuetify({
+            lang: {
+                current: 'pt-br'
+            },
+            theme: {
+                //dark: false,
+                //disable: true,
+                themes: {
+                    light: {
+                        primary: 'rgba(150,0,170,0.75)',
+                        secondary: '#607d8b',
+                        accent: 'rgb(30,90,120)',
+                        error: '#e91e63',
+                        warning: '#ff5722',
+                        info: '#2196f3',
+                        success: '#4caf50'
+                    },
+                    dark: {
+                        primary: '#215f5e',
+                        secondary: '#607d8b',
+                        accent: '#03a9f4',
+                        error: '#e91e63',
+                        warning: '#ff5722',
+                        info: '#2196f3',
+                        success: '#4caf50'
+                    },
+                },
+            },
+        }),
+        data:{
+            drawer: null,
+        },
+        methods: {
+            
+        },
+        created(){
+            
+            
+            this.$vuetify.lang.locales.en.dataTable.itemsPerPageText = 'Itens por página'
+            this.$vuetify.lang.locales.en.dataTable.ariaLabel.sortDescending = "Ordenar decrescente"
+            this.$vuetify.lang.locales.en.dataTable.ariaLabel.sortAscending = "ordenar crescente"
+            this.$vuetify.lang.locales.en.dataTable.ariaLabel.sortNone = "Não ordenado"
+            this.$vuetify.lang.locales.en.dataTable.ariaLabel.activateNone = "remover ordenação"
+            this.$vuetify.lang.locales.en.dataTable.ariaLabel.activateDescending = "Decrescente"
+            this.$vuetify.lang.locales.en.dataTable.ariaLabel.activateAscending = "Crescente"
+            this.$vuetify.lang.locales.en.dataTable.sortBy = "Ordenar por"
+        },
+        mounted(){
+        },
+        watch: {
+        },
+        computed: {
+        },
+    });
+</script>
+{% block custom_js %}{% endblock %}
+</body>
+</html>

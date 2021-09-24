@@ -1,0 +1,99 @@
+{% load basetags %}
+<!-- USUARIO -->
+<v-list-item>
+    <v-list-item-avatar>
+        <v-img src="{{request.user.get_foto}}"/>
+    </v-list-item-avatar>
+
+    <v-list-item-content>
+        <v-list-item-title>{% firstof request.user.first_name request.user.username %}</v-list-item-title>
+        <v-list-item-subtitle title="{{request.user.email}}">{{request.user.email}}</v-list-item-subtitle>
+    </v-list-item-content>
+
+    <v-list-item-action>
+        <v-btn icon href="{% url 'logout' %}">
+            <v-icon color="">mdi-logout</v-icon>
+        </v-btn>
+    </v-list-item-action>
+</v-list-item>
+
+
+<!-- PAGINA INICIAL -->
+<v-list-item :to="{name:'inicio'}" exact color="white">
+    <v-list-item-avatar>
+        <v-icon>mdi-home-variant</v-icon>
+    </v-list-item-avatar>
+
+    <v-list-item-content>
+        <v-list-item-title>Página inicial</v-list-item-title>
+        <v-list-item-subtitle></v-list-item-subtitle>
+    </v-list-item-content>
+
+    <v-list-item-action></v-list-item-action>
+</v-list-item>
+
+
+<!-- Depositos -->
+<v-list-item :to="{name:'status'}" exact color="white">
+    <v-list-item-avatar>
+        <v-icon>mdi-dropbox</v-icon>
+    </v-list-item-avatar>
+
+    <v-list-item-content>
+        <v-list-item-title>Depósitos</v-list-item-title>
+        <v-list-item-subtitle></v-list-item-subtitle>
+    </v-list-item-content>
+
+    <v-list-item-action></v-list-item-action>
+</v-list-item>
+
+<!-- TOKEN -->
+<resetaluno></resetaluno>
+
+<!--Formulario do Google-->
+{% if not request.user.is_staff or request.user.is_superuser %}
+<v-list-item :to="{name:'formsgoogle'}" exact color="white">
+    <v-list-item-avatar>
+        <v-icon>mdi-file-document-box</v-icon>
+    </v-list-item-avatar>
+    
+    <v-list-item-content>
+        <v-list-item-title>Editais UNDB</v-list-item-title>
+        <v-list-item-subtitle></v-list-item-subtitle>
+    </v-list-item-content>
+    
+    <v-list-item-action></v-list-item-action>
+</v-list-item>
+{% endif %}
+<!--Só irá aparecer para quem for administrador-->
+{% if request.user.is_superuser %}
+<!-- ADMIN -->
+<v-list-item href="/admin/" color="white">
+    <v-list-item-avatar>
+        <v-icon>mdi-settings</v-icon>
+    </v-list-item-avatar>
+
+    <v-list-item-content>
+        <v-list-item-title>Administração</v-list-item-title>
+        <v-list-item-subtitle></v-list-item-subtitle>
+    </v-list-item-content>
+
+    <v-list-item-action></v-list-item-action>
+</v-list-item>
+
+{% endif %}
+<!-- LOGOUT -->
+<v-list-item href="{% url 'logout' %}" color="white">
+    <v-list-item-avatar>
+        <v-icon>mdi-logout</v-icon>
+    </v-list-item-avatar>
+
+    <v-list-item-content>
+        <v-list-item-title>Sair</v-list-item-title>
+        <v-list-item-subtitle></v-list-item-subtitle>
+    </v-list-item-content>
+
+    <v-list-item-action>
+        
+    </v-list-item-action>
+</v-list-item>

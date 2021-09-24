@@ -1,0 +1,57 @@
+{% extends "app.html" %}
+
+{% block title %} {{block.super}} | Login {% endblock %}
+{% block navbar %}{% endblock %}
+{% block sidebar %}{% endblock %}
+{% block main_class %}image-bg{% endblock %}
+
+{% block content_card %}
+
+<div>
+    <v-row dense class="justify-center" style="margin-top:8vw">
+        <v-col dense cols="10" sm="6" md="6" lg="4" >
+            <v-card dense class="pa-4 ofuscado" elevation="0" outlined >
+                <v-container>
+                    <h3>Acesso</h3>
+                    <br>
+                    {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                    <p class="text-danger">
+                        {{ error }}
+                    </p>
+                    {% endfor %}
+                    {% endif %}
+                    
+                    <v-form ref="form" method="post" lazy-validation>
+                        {% csrf_token %}
+                        <v-text-field dense outlined color="dark" label="{{form.username.label}}" required id="{{ form.username.id_for_label }}" 
+                        name="{{ form.username.html_name }}" hide-details ></v-text-field>
+                        {% if form.username.errors %}
+                        {% for error in form.username.errors %}
+                        <small class="error--text">{{ error }}</small>
+                        {% endfor %}
+                        {% endif %}
+                        <br>
+                        <v-text-field dense outlined hide-details color="dark" label="{{form.password.label}}" required id="{{ form.password.id_for_label }}" 
+                        name="{{ form.password.html_name }}" type="password"></v-text-field>
+                        {% if form.password.errors %}
+                        {% for error in form.password.errors %}
+                        <small class="error--text">{{ error }}</small>
+                        {% endfor %}
+                        {% endif %}
+
+                        <br>
+                        <v-btn type="submit" color="dark" outlined class="mr-4">Acessar</v-btn>
+                    </v-form>
+                    <br>
+                    <v-divider class="my-2"></v-divider>
+                    <v-row dense>
+                        <v-spacer></v-spacer>
+                    </v-row>
+                </v-container>
+            </v-card><!-- end card -->
+        </v-col> <!-- end col -->
+    </v-row><!-- end row -->
+
+</div>
+{% endblock %}
